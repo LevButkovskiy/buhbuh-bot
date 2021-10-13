@@ -5,12 +5,13 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "env-cmd nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "env-cmd": "^10.1.0",
     "node-fetch": "^3.0.0",
     "nodemon": "^2.0.13",
     "telegraf": "^4.4.2"

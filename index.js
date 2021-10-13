@@ -1,7 +1,8 @@
 import fetch from "node-fetch";
 import Telegraf from 'telegraf'
 
-const API_TOKEN = '2023441415:AAEiOIGtlA3AmEYMfs2b3whH3N7jqQ9CvGs';
+const API_TOKEN = process.env.API_TOKEN
+const URL_STATICS = 'http://api.bluebeakstd.ru:3080/v1/buhbuh'
 
 const bot = new Telegraf.Telegraf(API_TOKEN)
 
@@ -192,15 +193,20 @@ const sendStatics = (username, name, country_code, date, action) => {
     let strData = JSON.stringify(data);
     console.log(strData)
 
-    fetch('http://api.bluebeakstd.ru:3080/v1/buhbuh', {
+    fetch(URL_STATICS, {
         method: 'POST',
         body: strData,
         headers: {
             'Content-Type': 'application/json'
         },
     })
-        .then(result => result.json)
+        .then(result => result.json())
         .then(data => console.log(data))
+        .catch(err => console.error(`Не удалось получить статистику с ${URL_STATICS}`, err.message))
+}
+
+const randomNumber = (min, max) => {
+    return Math.floor(Math.abs(min - 0.5 + Math.random() * (max - min + 1)))
 }
 
 bot.start((ctx) => {
@@ -208,14 +214,14 @@ bot.start((ctx) => {
     ctx.reply(generateStartText())
 })
 
-bot.help((ctx) => ctx.reply('Help'))
+bot.help((ctx) => ctx.reply(generateStartText()))
 
 bot.command('/drink', (ctx) => {
     sendStatics(ctx.message.from.username, ctx.message.from.first_name, ctx.message.from.language_code, ctx.message.date, ctx.message.text)
     ctx.reply('У нас есть несколько маршрутов:\n1.Маршрут "Поперечного"\n2.Персональный\n\nТебе какой?')
 });
 
-bot.command('sales', (ctx) => {
+bot.command('/sales', (ctx) => {
     sendStatics(ctx.message.from.username, ctx.message.from.first_name, ctx.message.from.language_code, ctx.message.date, ctx.message.text)
     ctx.reply('10% на все, везде. Промокод: BUHBUH10')
 })
@@ -223,15 +229,11 @@ bot.command('sales', (ctx) => {
 bot.on('text', (ctx) => {
     sendStatics(ctx.message.from.username, ctx.message.from.first_name, ctx.message.from.language_code, ctx.message.date, ctx.message.text)
 
-    let route = null;
+    // добавил вывод рандомного маршрута. До этого если выбирать персональный маршрут выводится только третий
+    const filteredRoutes = routes.filter((route) => route.tags.includes(ctx.message.text.toLowerCase()))
 
-    routes.forEach((routeEl) => {
-        if (routeEl.tags.includes(ctx.message.text.toLowerCase())) {
-            route = routeEl;
-        }
-    })
-
-    if (route) {
+    if (filteredRoutes.length) {
+        const route = filteredRoutes[randomNumber(0, filteredRoutes.length - 1)]
         ctx.reply(barsText(`${route.name}\n`, route.bars.map(renderBars)))
     } else {
         ctx.reply('Такого у нас нет. Попробуй другой')
