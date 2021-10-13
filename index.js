@@ -1,6 +1,9 @@
-const API_TOKEN = 'PAST TOKEN HERE';
-const footer1 = 'Маршрут 1.\n\n';
-const footer2 = 'Маршрут 2.\n\n'
+import fetch from "node-fetch";
+import Telegraf from 'telegraf'
+
+const API_TOKEN = '2023441415:AAEiOIGtlA3AmEYMfs2b3whH3N7jqQ9CvGs';
+
+const bot = new Telegraf.Telegraf(API_TOKEN)
 
 const generateStartText = () => {
     const startText = 'Привет! Ты попал в бота BuhBuh.';
@@ -177,12 +180,49 @@ const barsText = (title, arr) => {
     return title + finalString;
 }
 
-const { Telegraf } = require('telegraf')
-const bot = new Telegraf(API_TOKEN)
-bot.start((ctx) => ctx.reply(generateStartText()))
+const sendStatics = (username, name, country_code, date, action) => {
+    let data = {
+        username,
+        name,
+        country_code,
+        date,
+        action
+    }
+
+    let strData = JSON.stringify(data);
+    console.log(strData)
+
+    fetch('http://api.bluebeakstd.ru:3080/v1/buhbuh', {
+        method: 'POST',
+        body: strData,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+        .then(result => result.json)
+        .then(data => console.log(data))
+}
+
+bot.start((ctx) => {
+    sendStatics(ctx.message.from.username, ctx.message.from.first_name, ctx.message.from.language_code, ctx.message.date, ctx.message.text)
+    ctx.reply(generateStartText())
+})
+
 bot.help((ctx) => ctx.reply('Help'))
-bot.command('/drink', (ctx) => ctx.reply('У нас есть несколько маршрутов:\n1.Маршрут "Поперечного"\n2.Персональный\n\nТебе какой?'));
+
+bot.command('/drink', (ctx) => {
+    sendStatics(ctx.message.from.username, ctx.message.from.first_name, ctx.message.from.language_code, ctx.message.date, ctx.message.text)
+    ctx.reply('У нас есть несколько маршрутов:\n1.Маршрут "Поперечного"\n2.Персональный\n\nТебе какой?')
+});
+
+bot.command('sales', (ctx) => {
+    sendStatics(ctx.message.from.username, ctx.message.from.first_name, ctx.message.from.language_code, ctx.message.date, ctx.message.text)
+    ctx.reply('10% на все, везде. Промокод: BUHBUH10')
+})
+
 bot.on('text', (ctx) => {
+    sendStatics(ctx.message.from.username, ctx.message.from.first_name, ctx.message.from.language_code, ctx.message.date, ctx.message.text)
+
     let route = null;
 
     routes.forEach((routeEl) => {
@@ -196,9 +236,8 @@ bot.on('text', (ctx) => {
     } else {
         ctx.reply('Такого у нас нет. Попробуй другой')
     }
-})
 
-bot.command('sales', (ctx) => ctx.reply('10% на все, везде. Промокод: BUHBUH10'))
+})
 
 bot.launch();
 
