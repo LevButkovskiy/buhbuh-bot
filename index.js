@@ -100,7 +100,7 @@ bot.on('text', (ctx) => {
         ctx.reply(text);
         ctx.telegram.sendLocation(ctx.message.chat.id, route.bars[0].latitude, route.bars[0].longitude);
 
-        let url = `https://static-maps.yandex.ru/1.x/?l=map&ll=${route.bars[0].longitude},${route.bars[0].latitude}&size=450,450&z=12&pt=`;
+        let url = `https://static-maps.yandex.ru/1.x/?l=map&ll=${route.bars[0].longitude},${route.bars[0].latitude}&size=450,450&pt=`;
         route.bars.forEach((bar, index) => {
             url += `${bar.longitude},${bar.latitude},pmwtm${index + 1}`
             if (index != route.bars.length - 1) {
