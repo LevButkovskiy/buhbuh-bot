@@ -1,7 +1,8 @@
 import fetch from "node-fetch";
 import Telegraf from 'telegraf'
 
-import {bars1, bars2, bars3, routes} from './src/data.js';
+import fs from 'fs';
+const data = JSON.parse(fs.readFileSync('./src/data.json'));
 
 const API_TOKEN = process.env.API_TOKEN
 const URL_STATICS = 'http://api.bluebeakstd.ru:3080/v1/buhbuh'
@@ -25,13 +26,14 @@ const renderBars = (bar, index) => {
 }
 
 const barsText = (title, arr) => {
-    const footerMap = '\nВысылаем координаты первого бара:'
+    const footerMap = '\nВысылаем координаты первого бара:\n';
+    const byeText = "🌘 Хорошего вечера!"
     let finalString = '';
     arr.forEach(element => {
         finalString += element;
     });
 
-    return title + finalString + footerMap;
+    return title + finalString + footerMap + byeText;
 }
 
 const sendStatics = (username, name, country_code, date, action) => {
@@ -69,8 +71,12 @@ bot.start((ctx) => {
 bot.help((ctx) => ctx.reply(generateStartText()))
 
 bot.command('/drink', (ctx) => {
-    sendStatics(ctx.message.from.username, ctx.message.from.first_name, ctx.message.from.language_code, ctx.message.date, ctx.message.text)
-    ctx.reply('У нас есть несколько маршрутов:\n1.Маршрут "Поперечного"\n2.Персональный\n\nТебе какой?')
+    sendStatics(ctx.message.from.username, ctx.message.from.first_name, ctx.message.from.language_code, ctx.message.date, ctx.message.text);
+    const uniqueRoutes = [...new Set(data.routes.map((route, index) => `${route.key}. ${route.name}`))];
+    const routesArr = uniqueRoutes.map((route) => `${route}\n`)
+    let routesText = ''
+    routesArr.forEach((route) => routesText += route);
+    ctx.reply(`У нас есть несколько маршрутов:\n${routesText}\nТебе какой?`)
 });
 
 bot.command('/sales', (ctx) => {
@@ -88,7 +94,7 @@ bot.on('text', (ctx) => {
     sendStatics(ctx.message.from.username, ctx.message.from.first_name, ctx.message.from.language_code, ctx.message.date, ctx.message.text)
 
     // добавил вывод рандомного маршрута. До этого если выбирать персональный маршрут выводится только третий
-    const filteredRoutes = routes.filter((route) => route.tags.includes(ctx.message.text.toLowerCase()))
+    const filteredRoutes = data.routes.filter((route) => route.tags.includes(ctx.message.text.toLowerCase()))
 
     if (filteredRoutes.length) {
         const route = filteredRoutes[randomNumber(0, filteredRoutes.length - 1)]
