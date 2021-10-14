@@ -85,8 +85,6 @@ bot.command('/sales', (ctx) => {
 })
 
 bot.command('/test', (ctx) => {
-    // sendStatics(ctx.message.from.username, ctx.message.from.first_name, ctx.message.from.language_code, ctx.message.date, ctx.message.text)
-    ctx.telegram.sendLocation(ctx.message.chat.id, 59.932441, 30.345683)
 
 })
 
@@ -100,7 +98,16 @@ bot.on('text', (ctx) => {
         const route = filteredRoutes[randomNumber(0, filteredRoutes.length - 1)]
         const text = barsText(`${route.name}\n`, route.bars.map(renderBars))
         ctx.reply(text);
-        ctx.telegram.sendLocation(ctx.message.chat.id, route.bars[0].latitude, route.bars[0].longitude)
+        ctx.telegram.sendLocation(ctx.message.chat.id, route.bars[0].latitude, route.bars[0].longitude);
+
+        let url = `https://static-maps.yandex.ru/1.x/?l=map&ll=${route.bars[0].longitude},${route.bars[0].latitude}&size=450,450&z=12&pt=`;
+        route.bars.forEach((bar, index) => {
+            url += `${bar.longitude},${bar.latitude},pmwtm${index + 1}`
+            if (index != route.bars.length - 1) {
+                url += '~'
+            }
+        });
+        ctx.telegram.sendPhoto(ctx.message.chat.id, url)
     } else {
         ctx.reply('Такого у нас нет. Попробуй другой')
     }
