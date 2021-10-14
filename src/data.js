@@ -48,43 +48,43 @@ const bars2 = [
     {
         title: 'Commod',
         address: 'Рубинштейна 1',
-        latitide: 59.932441,
+        latitude: 59.932441,
         longitude: 30.345683
     },
     {
         title: 'УЕБар',
         address: 'ул Восстания 12',
-        latitide: 59.936251,
+        latitude: 59.936251,
         longitude: 30.360029
     },
     {
         title: 'Пробирка',
         address: 'ул Ломоносова 2',
-        latitide: 59.932558,
+        latitude: 59.932558,
         longitude: 30.326917
     },
     {
         title: '«Хроники»',
         address: 'пл. Восстания, 24',
-        latitide: 59.931017,
+        latitude: 59.931017,
         longitude: 30.361467
     },
     {
         title: 'Бар Dead Poets',
         address: 'ул. Жуковского, 12',
-        latitide: 59.936124,
+        latitude: 59.936124,
         longitude: 30.353373
     },
     {
         title: 'Union',
         address: 'Литейный пр., 55',
-        latitide: 59.935674,
+        latitude: 59.935674,
         longitude: 30.347731
     },
     {
         title: '«Терминал»',
         address: 'ул. Белинского, 11',
-        latitide: 59.938076,
+        latitude: 59.938076,
         longitude: 30.347022
     },
 ];
@@ -127,55 +127,55 @@ const bars4 = [
         title: 'The Hat',
         address: 'ул. Белинского, 9',
         latitude: 59.938090,
-        longitide: 30.346599
+        longitude: 30.346599
     },
     {
         title: '«Продукты»',
         address: 'наб. Фонтанки, 17',
         latitude: 59.935858,
-        longitide: 30.343186
+        longitude: 30.343186
     },
     {
         title: 'Mishka Bar',
         address: 'наб. Фонтанки, 40',
         latitude: 59.933713,
-        longitide: 30.344623
+        longitude: 30.344623
     },
     {
         title: '«Цветочки»',
         address: 'ул. Рубинштейна, 23',
         latitude: 59.927996,
-        longitide: 30.343060
+        longitude: 30.343060
     },
     {
         title: 'Mitte',
         address: 'ул. Рубинштейна, 27',
         latitude: 59.927175,
-        longitide: 30.342593
+        longitude: 30.342593
     },
     {
         title: 'Wood Bar',
         address: 'ул. Марата, 34',
         latitude: 59.926021,
-        longitide: 30.352510
+        longitude: 30.352510
     },
     {
         title: 'Zing',
         address: 'ул. Ломоносова, 14',
         latitude: 59.927878,
-        longitide: 30.338479
+        longitude: 30.338479
     },
     {
         title: 'Poison',
         address: 'ул. Думская, 9',
         latitude: 59.932779,
-        longitide: 30.327322
+        longitude: 30.327322
     },
     {
         title: 'Kopen',
         address: 'Конюшенная пл., 2',
         latitude: 59.940709,
-        longitide: 30.325992
+        longitude: 30.325992
     },
 ]
 

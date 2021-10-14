@@ -92,7 +92,8 @@ bot.on('text', (ctx) => {
 
     if (filteredRoutes.length) {
         const route = filteredRoutes[randomNumber(0, filteredRoutes.length - 1)]
-        ctx.reply(barsText(`${route.name}\n`, route.bars.map(renderBars)))
+        const text = barsText(`${route.name}\n`, route.bars.map(renderBars))
+        ctx.reply(text);
         ctx.telegram.sendLocation(ctx.message.chat.id, route.bars[0].latitude, route.bars[0].longitude)
     } else {
         ctx.reply('Такого у нас нет. Попробуй другой')
