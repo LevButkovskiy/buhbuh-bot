@@ -91,13 +91,13 @@ bot.command('/test', (ctx) => {
 
 })
 
-bot.command('/instagram', (ctx) => {
-    sendStatics(ctx.message.from.username, ctx.message.from.first_name, ctx.message.from.language_code, ctx.message.date, ctx.message.text)
-    ctx.reply(ctx.message.chat_id, "<a href='https://instagram.com/buhbuhdrink'>instagram.com/buhbuhdrink</a>", 'html')
+bot.command('/instagram', async (ctx) => {
+    sendStatics(ctx.message.from.username, ctx.message.from.first_name, ctx.message.from.language_code, ctx.message.date, ctx.message.text);
+    ctx.reply(ctx.message.chat_id, "<a href='https://instagram.com/buhbuhdrink'>instagram.com/buhbuhdrink</a>")
 })
 
 bot.command('/version', (ctx) => {
-    ctx.reply('1.0.2')
+    ctx.reply('1.0.3')
 })
 
 
@@ -120,7 +120,7 @@ bot.on('text', (ctx) => {
                 url += '~'
             }
         });
-        ctx.telegram.sendPhoto(ctx.message.chat.id, url)
+        ctx.replyWithPhoto('https://picsum.photos/200/300/')
     } else {
         ctx.reply('Такого у нас нет. Попробуй другой')
     }
