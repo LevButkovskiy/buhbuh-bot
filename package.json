@@ -1,6 +1,6 @@
 {
   "name": "buhbuhbot",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Bot for found alcohol",
   "main": "index.js",
   "type": "module",

@@ -37,26 +37,29 @@ const barsText = (title, arr) => {
 }
 
 const sendStatics = (username, name, country_code, date, action) => {
-    let data = {
-        username,
-        name,
-        country_code,
-        date,
-        action
+    if(process.env.SEND_STATICS) {
+        let data = {
+            username,
+            name,
+            country_code,
+            date,
+            action
+        }
+
+        let strData = JSON.stringify(data);
+
+        fetch(URL_STATICS, {
+            method: 'POST',
+            body: strData,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+            .then(result => result.json())
+            .then(data => {
+            })
+            .catch(err => console.error(`Не удалось получить статистику с ${URL_STATICS}`, err.message))
     }
-
-    let strData = JSON.stringify(data);
-
-    fetch(URL_STATICS, {
-        method: 'POST',
-        body: strData,
-        headers: {
-            'Content-Type': 'application/json'
-        },
-    })
-        .then(result => result.json())
-        .then(data => {})
-        .catch(err => console.error(`Не удалось получить статистику с ${URL_STATICS}`, err.message))
 }
 
 const randomNumber = (min, max) => {
@@ -86,6 +89,11 @@ bot.command('/sales', (ctx) => {
 
 bot.command('/test', (ctx) => {
 
+})
+
+bot.command('/instagram', (ctx) => {
+    sendStatics(ctx.message.from.username, ctx.message.from.first_name, ctx.message.from.language_code, ctx.message.date, ctx.message.text)
+    ctx.reply(ctx.message.chat_id, "<a href='https://instagram.com/buhbuhdrink'>instagram.com/buhbuhdrink</a>", 'html')
 })
 
 bot.on('text', (ctx) => {
