@@ -96,6 +96,11 @@ bot.command('/instagram', (ctx) => {
     ctx.reply(ctx.message.chat_id, "<a href='https://instagram.com/buhbuhdrink'>instagram.com/buhbuhdrink</a>", 'html')
 })
 
+bot.command('/version', (ctx) => {
+    ctx.reply('1.0.2')
+})
+
+
 bot.on('text', (ctx) => {
     sendStatics(ctx.message.from.username, ctx.message.from.first_name, ctx.message.from.language_code, ctx.message.date, ctx.message.text)
 
