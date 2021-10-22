@@ -7,7 +7,7 @@ import data from './src/data.js';
 import logger from "./utils/logger.js";
 
 const API_TOKEN = process.env.API_TOKEN;
-const URL_STATICS = 'http://api.bluebeakstd.ru:3080/v1/buhbuh';
+const URL_STATICS = 'https://api.bluebeakstd.ru:3080/v1/buhbuh';
 
 const bot = new Telegraf.Telegraf(API_TOKEN);
 
@@ -42,10 +42,10 @@ const sendStatics = (ctx) => {
     const name = ctx.message.from.first_name;
     const country_code = ctx.message.from.language_code;
     const date = ctx.message.from.date;
-    const action = ctx.message.from.text;
+    const action = ctx.message.text;
 
     logger.debug(`${username} - ${action}`)
-    
+
     if(C_SEND_STATICS) {
         fetch(URL_STATICS, {
             method: 'POST',
