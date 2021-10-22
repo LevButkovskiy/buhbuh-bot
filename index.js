@@ -4,6 +4,8 @@ import Telegraf from 'telegraf'
 import constants from './src/constants.js';
 import data from './src/data.js';
 
+import logger from "./utils/logger.js";
+
 const API_TOKEN = process.env.API_TOKEN;
 const URL_STATICS = 'http://api.bluebeakstd.ru:3080/v1/buhbuh';
 
@@ -42,6 +44,8 @@ const sendStatics = (ctx) => {
     const date = ctx.message.from.date;
     const action = ctx.message.from.text;
 
+    logger.debug(`${username} - ${action}`)
+    
     if(C_SEND_STATICS) {
         fetch(URL_STATICS, {
             method: 'POST',
@@ -104,26 +108,36 @@ bot.command('/version', (ctx) => {
     ctx.reply(data.version)
 })
 
+bot.command('/debug', (ctx) => {
+    ctx.reply('debug')
+})
+
 
 bot.on('text', (ctx) => {
     sendStatics(ctx);
     const filteredRoutes = data.routes.filter((route) => route.tags.includes(ctx.message.text.toLowerCase()))
 
     if (filteredRoutes.length) {
-        const route = filteredRoutes[randomNumber(0, filteredRoutes.length - 1)]
-        const text = barsText(`${route.name}\n`, route.bars.map(renderBars))
-        ctx.reply(text);
+        try {
+            const route = filteredRoutes[randomNumber(0, filteredRoutes.length - 1)]
+            const text = barsText(`${route.name}\n`, route.bars.map(renderBars))
+            ctx.reply(text);
 
-        let url = `https://static-maps.yandex.ru/1.x/?l=map&ll=${route.bars[0].longitude},${route.bars[0].latitude}&size=450,450&pt=`;
-        route.bars.forEach((bar, index) => {
-            url += `${bar.longitude},${bar.latitude},pmwtm${index + 1}`
-            if (index != route.bars.length - 1) {
-                url += '~'
-            }
-        });
-        ctx.replyWithPhoto(url).then(r => {
-            ctx.telegram.sendLocation(ctx.message.chat.id, route.bars[0].latitude, route.bars[0].longitude).then(r => {});
-        })
+            let url = `https://static-maps.yandex.ru/1.x/?l=map&ll=${route.bars[0].longitude},${route.bars[0].latitude}&size=450,450&pt=`;
+            route.bars.forEach((bar, index) => {
+                url += `${bar.longitude},${bar.latitude},pmwtm${index + 1}`
+                if (index != route.bars.length - 1) {
+                    url += '~'
+                }
+            });
+            ctx.replyWithPhoto(url).then(r => {
+                ctx.telegram.sendLocation(ctx.message.chat.id, route.bars[0].latitude, route.bars[0].longitude).then(r => {
+                });
+            })
+        }
+        catch (e) {
+            logger.error(e)
+        }
 
     } else {
         ctx.reply(constants.ROUTES.NOT_FOUND)
